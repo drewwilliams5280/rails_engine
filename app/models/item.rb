@@ -7,6 +7,10 @@ class Item < ApplicationRecord
   validates :name, :description, :unit_price, :updated_at, :created_at, presence: true
   
   def convert_unit_price
-    unit_price.to_s.insert(-3, '.').to_f
+    if unit_price.to_s[-2] == "."
+      unit_price.to_i.to_s.insert(-3, '.').to_f
+    else
+      unit_price
+    end
   end
 end
