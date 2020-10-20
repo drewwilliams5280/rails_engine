@@ -8,6 +8,18 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def create
-    require 'pry'; binding.pry
+    item = Item.create!(item_params)
+    render json: ItemSerializer.new(item)
   end 
+
+  def destroy
+    item = Item.find(params[:id])
+    item.destroy
+  end
+
+  private
+
+  def item_params
+    params.permit(:name, :description, :unit_price, :merchant_id)
+  end
 end

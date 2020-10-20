@@ -4,7 +4,7 @@ class Item < ApplicationRecord
   has_many :invoice_items
   has_many :invoices, through: :invoice_items 
 
-  validates :name, :description, :unit_price, :updated_at, :created_at, presence: true
+  validates :name, :description, :unit_price, presence: true
   
   def convert_unit_price
     if unit_price.to_s[-2] == "."
