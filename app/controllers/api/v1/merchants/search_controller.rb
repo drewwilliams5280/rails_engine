@@ -1,6 +1,7 @@
 class Api::V1::Merchants::SearchController < ApplicationController
   def index
-    merchants = Merchant.where("lower(name) LIKE ?", "%" + params[:name].downcase + "%")
+    method = request.env["PATH_INFO"].split('/').last.downcase
+    merchants = Merchant.send(method, params)
     render json: MerchantSerializer.new(merchants)
   end
 

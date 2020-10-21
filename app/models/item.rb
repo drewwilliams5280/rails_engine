@@ -6,4 +6,9 @@ class Item < ApplicationRecord
   has_many :transactions, through: :invoices
 
   validates :name, :description, :unit_price, presence: true
+
+  def self.find_all(params)
+    Item.where("lower(name) LIKE ?", "%" + params[:name].downcase + "%")
+  end
+  
 end

@@ -29,7 +29,6 @@ describe "Item search" do
     create(:item, name: "Howdydoody")
     create(:item, name: "Boboblob")
     create(:item, name: "Hello World")
-
     get '/api/v1/items/find?name=DOO'
     
     expect(response).to be_successful

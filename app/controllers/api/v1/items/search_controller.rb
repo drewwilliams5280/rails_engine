@@ -1,7 +1,8 @@
 class Api::V1::Items::SearchController < ApplicationController
   
   def index
-    items = Item.where("lower(name) LIKE ?", "%" + params[:name].downcase + "%")
+    method = request.env["PATH_INFO"].split('/').last.downcase
+    items = Item.send(method, params)
     render json: ItemSerializer.new(items)
   end
 
