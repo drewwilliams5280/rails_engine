@@ -7,4 +7,6 @@ class Invoice < ApplicationRecord
   has_many :items, through: :invoice_items
 
   validates :status, presence: true
+
+  scope :shipped, -> { where(status: "shipped") }
 end

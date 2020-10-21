@@ -1,10 +1,21 @@
 class Merchant < ApplicationRecord
   has_many :items
   has_many :invoices
+  has_many :transactions, through: :invoices
 
   validates :name, presence: true
 
   def self.find_all(params)
     Merchant.where("lower(name) LIKE ?", "%" + params[:name].downcase + "%")
+  end
+
+  def self.most_revenue(params)
+    select("merchants.*, SUM(invoice_items.quantity * invoice_items.unit_price) AS revenue")
+    .joins(invoices: [:invoice_items, :transactions])
+    .merge(Transaction.successful)
+    .merge(Invoice.shipped)
+    .group(:id)
+    .order("revenue DESC")
+    .limit(params[:quantity])
   end
 end
