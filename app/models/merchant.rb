@@ -2,6 +2,7 @@ class Merchant < ApplicationRecord
   has_many :items
   has_many :invoices
   has_many :transactions, through: :invoices
+  has_many :invoice_items, through: :items
 
   validates :name, presence: true
 
@@ -16,6 +17,16 @@ class Merchant < ApplicationRecord
     .merge(Invoice.shipped)
     .group(:id)
     .order("revenue DESC")
+    .limit(params[:quantity])
+  end
+
+  def self.most_items(params)
+    select("merchants.*, SUM(invoice_items.quantity) AS most_items")
+    .joins(invoices: [:invoice_items, :transactions])
+    .merge(Transaction.successful)
+    .merge(Invoice.shipped)
+    .group(:id)
+    .order("most_items DESC")
     .limit(params[:quantity])
   end
 end
