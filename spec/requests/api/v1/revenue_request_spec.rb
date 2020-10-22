@@ -47,7 +47,7 @@ describe "Revenue API" do
       expect(json_response[:data]).to have_key(:attributes)
 
       revenue = json_response[:data][:attributes][:revenue]
-      expect(revenue).to eq(9)
+      expect(revenue).to eq(9.0)
     end
 
     it "sends total for a merchant" do
@@ -88,6 +88,16 @@ describe "Revenue API" do
         get "/api/v1/merchants/#{m1.id}/revenue"
   
         expect(response).to be_successful
-        require 'pry'; binding.pry
+        json_response = JSON.parse(response.body, symbolize_names: true)
+        expect(json_response).to be_a Hash
+        expect(json_response).to have_key(:data)
+        expect(json_response).to be_a Hash
+        expect(json_response).to have_key(:data)
+        expect(json_response[:data]).to have_key(:type)
+        expect(json_response[:data][:type]).to eq('revenue')
+        expect(json_response[:data]).to have_key(:attributes)
+  
+        revenue = json_response[:data][:attributes][:revenue]
+        expect(revenue).to eq(6.0)
       end
   end
